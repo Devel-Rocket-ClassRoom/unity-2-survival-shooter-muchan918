@@ -36,6 +36,7 @@ public class Monster : LivingEntity
     public float sinkSpeed;
 
     private float damage;
+    public int score {get; private set;}
 
     private Status currentStatus;
 
@@ -48,7 +49,7 @@ public class Monster : LivingEntity
         {
             var prevStatus = currentStatus;
             currentStatus = value;
-            Debug.Log(currentStatus);
+            //Debug.Log(currentStatus);
 
             switch (currentStatus)
             {
@@ -84,6 +85,7 @@ public class Monster : LivingEntity
         agent.speed = data.speed;
         spawnInterval = data.spawnInterval;
         attackDistance = data.attackDistance;
+        score = data.score;
 
         gameObject.SetActive(true);
     }

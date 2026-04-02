@@ -8,4 +8,5 @@ public class MonsterData : ScriptableObject
     public float speed = 2f;
     public float attackDistance = 1f;
     public float spawnInterval = 2f;
+    public int score = 10;
 }

@@ -7,6 +7,7 @@ public class PlayerHealth : LivingEntity
 {
     public Image damaged;
     public Slider hpSlider;
+    public GameManager gameManager;
 
     private AudioSource playerAudioSource;
     private Animator playerAnimator;
@@ -62,6 +63,8 @@ public class PlayerHealth : LivingEntity
 
         base.Die();
 
+        gameManager.SetActiveGameOverUI(true);
+
         playerAudioSource.PlayOneShot(deathClip);
         playerAnimator.SetTrigger("Die");
 
@@ -72,6 +75,7 @@ public class PlayerHealth : LivingEntity
     private void RestartLevel()
     {
         // 레벨 재시작 로직
+        gameManager.SetActiveGameOverUI(false);
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 }

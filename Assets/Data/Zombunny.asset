@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterData
   maxHP: 70
   damage: 10
-  speed: 4
+  speed: 3
   attackDistance: 1
   spawnInterval: 2
+  score: 10
