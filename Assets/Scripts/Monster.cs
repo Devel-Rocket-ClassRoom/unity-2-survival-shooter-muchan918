@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public class Monster : LivingEntity
 {
@@ -20,9 +21,19 @@ public class Monster : LivingEntity
     public Collider monsterCollider;
     public LayerMask targetLayer;
 
+    public MonsterData data;
+
+    public AudioClip hurtClip;
+    public AudioClip deathClip;
+
     public float attackDistance;
     public float attackInterval = 1f;
     private float lastAttackTime;
+
+    public float spawnInterval;
+
+    private bool isSinking;
+    public float sinkSpeed;
 
     private float damage;
 
@@ -54,21 +65,25 @@ public class Monster : LivingEntity
                     agent.isStopped = false;
                     break;
                 case Status.Die:
+                    monsterAnimator.SetTrigger("Die");
+                    agent.isStopped = true;
+                    agent.enabled = false;
+                    monsterCollider.enabled = false;
+                    monsterAudioSource.PlayOneShot(deathClip);
                     break;
             }
         }
     }
 
-    public void Setup(MonsterData data)
+    private void Start()
     {
         gameObject.SetActive(false);
 
         startingHealth = data.maxHP;
         damage = data.damage;
         agent.speed = data.speed;
+        spawnInterval = data.spawnInterval;
         attackDistance = data.attackDistance;
-        hurtClip = data.hurtClip;
-        deathClip = data.deathClip;
 
         gameObject.SetActive(true);
     }
@@ -76,6 +91,7 @@ public class Monster : LivingEntity
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        sinkSpeed = 0.5f;
         monsterAnimator = GetComponent<Animator>();
         monsterAudioSource = GetComponent<AudioSource>();
         monsterCollider = GetComponent<Collider>();
@@ -88,6 +104,7 @@ public class Monster : LivingEntity
         // NavMesh를 사용할거면 이걸 추가해야한다
         agent.enabled = true;
         agent.isStopped = false;
+        isSinking = false;
         agent.ResetPath();
         if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 10f, NavMesh.AllAreas))
         {
@@ -101,6 +118,11 @@ public class Monster : LivingEntity
 
     private void Update()
     {
+        if (isSinking)
+        {
+            transform.Translate(Vector3.down * sinkSpeed * Time.deltaTime);
+        }
+
         // 상태가 업데이트 될때마다 실행해야될 함수 -> 메서드로 만들어서 실행
         switch (currentStatus)
         {
@@ -130,17 +152,11 @@ public class Monster : LivingEntity
 
     private void UpdateTrace()
     {
-        if (target == null)
-        {
-            CurrentStatus = Status.Idle;
-            return;
-        }
-
         var LookAt = target.position;
         LookAt.y = transform.position.y;
         transform.LookAt(LookAt);
 
-        if (target != null && Vector3.Distance(target.position, transform.position) < attackDistance)
+        if (Vector3.Distance(target.position, transform.position) < attackDistance)
         {
             CurrentStatus = Status.Attack;
             return;
@@ -151,12 +167,6 @@ public class Monster : LivingEntity
 
     private void UpdateAttack()
     {
-        if (target == null)
-        {
-            CurrentStatus = Status.Idle;
-            return;
-        }
-
         if (Vector3.Distance(target.position, transform.position) >= attackDistance)
         {
             CurrentStatus = Status.Trace;
@@ -176,13 +186,38 @@ public class Monster : LivingEntity
                 if (!livingEntity.IsDead)
                 {
                     Debug.Log("Attacking");
+                    livingEntity.OnDamage(damage, transform.position, -transform.forward);
                 }
             }
         }
+
+        agent.SetDestination(target.position);
     }
 
     private void UpdateDie()
     {
-        throw new NotImplementedException();
+
+    }
+
+    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+    {
+        base.OnDamage(damage, hitPoint, hitNormal);
+
+        monsterAudioSource.PlayOneShot(hurtClip);
+        hurtEffect.transform.position = hitPoint;
+        hurtEffect.transform.forward = hitNormal;
+        hurtEffect.Play();
+    }
+
+    public override void Die()
+    {
+        CurrentStatus = Status.Die;
+        base.Die();
+    }
+
+    private void StartSinking()
+    {
+        isSinking = true;
+        Destroy(gameObject, 3f);
     }
 }

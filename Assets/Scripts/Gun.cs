@@ -52,9 +52,12 @@ public class Gun : MonoBehaviour
             hitPosition = hit.point;
 
             // 데미지 처리하기
-
-
-
+            var target = hit.collider.GetComponent<LivingEntity>();
+            if (target != null)
+            {
+                // ray로 충돌하는 충돌체의 법선은 충돌체의 모양에 따라 달라진다.
+                target.OnDamage(20f, hit.point, hit.normal);
+            }
         }
         else // 안맞았을때
         {

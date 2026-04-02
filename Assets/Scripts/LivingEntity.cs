@@ -7,9 +7,6 @@ public class LivingEntity : MonoBehaviour, IDamagable
     public float Health { get; private set; }
     public bool IsDead { get; private set; }
 
-    public AudioClip hurtClip { get; set; }
-    public AudioClip deathClip { get; set; }
-
     public UnityEvent OnDead;
 
     protected virtual void OnEnable()
