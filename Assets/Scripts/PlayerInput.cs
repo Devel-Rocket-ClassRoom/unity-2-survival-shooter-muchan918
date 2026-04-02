@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerInput : MonoBehaviour
     public float MoveY { get; private set; }
     public Vector2 MousePosition { get; private set; }
     public bool Fire { get; private set; }
+    public bool Dash { get; private set; }
+    public bool Explode { get; private set; }
 
     private void Update()
     {
@@ -17,5 +20,7 @@ public class PlayerInput : MonoBehaviour
         MoveY = Input.GetAxisRaw(MoveYAxis);
         MousePosition = Input.mousePosition;
         Fire = Input.GetButton(FireButton);
+        Dash = Input.GetKeyDown(KeyCode.Space);
+        Explode = Input.GetKeyDown(KeyCode.Q);
     }
 }
