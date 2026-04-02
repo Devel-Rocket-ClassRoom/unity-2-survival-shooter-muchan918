@@ -35,6 +35,7 @@ public class MonsterSpawner : MonoBehaviour
             if (Time.time > lastSpawnTime[i] + monsterSpawnIntervals[i])
             {
                 CreateMonster(i);
+                lastSpawnTime[i] = Time.time;
             }
         }
     }

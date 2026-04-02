@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterData
   maxHP: 100
   damage: 20
-  speed: 2
+  speed: 3
   attackDistance: 1
-  hurtClip: {fileID: 0}
-  deathClip: {fileID: 0}
+  spawnInterval: 2

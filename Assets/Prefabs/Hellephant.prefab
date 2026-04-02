@@ -321,6 +321,7 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: 8c615fd0429f34edf85539d70279360d, type: 3}
   attackDistance: 3
   attackInterval: 1
+  spawnInterval: 5
   sinkSpeed: 0.5
 --- !u!4 &8176849860127792408 stripped
 Transform:

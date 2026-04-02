@@ -259,6 +259,7 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: 1d3bfb9269f136947bf8ac164cace1ff, type: 3}
   attackDistance: 1
   attackInterval: 1
+  spawnInterval: 3
   sinkSpeed: 0.5
 --- !u!1001 &8862738079431068938
 PrefabInstance:
