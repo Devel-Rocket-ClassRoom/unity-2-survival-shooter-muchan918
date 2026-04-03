@@ -36,7 +36,7 @@ public class Monster : LivingEntity
     public float sinkSpeed;
 
     private float damage;
-    public int score {get; private set;}
+    public int score { get; private set; }
 
     private Status currentStatus;
 
@@ -187,7 +187,7 @@ public class Monster : LivingEntity
             {
                 if (!livingEntity.IsDead)
                 {
-                    Debug.Log("Attacking");
+                    //Debug.Log("Attacking");
                     livingEntity.OnDamage(damage, transform.position, -transform.forward);
                 }
             }

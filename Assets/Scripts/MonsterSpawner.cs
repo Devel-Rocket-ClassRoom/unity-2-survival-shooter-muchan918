@@ -22,7 +22,7 @@ public class MonsterSpawner : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             monsterSpawnIntervals[i] = prefab[i].spawnInterval;
-            lastSpawnTime[i] = 0f;
+            lastSpawnTime[i] = -prefab[i].spawnInterval;
         }
     }
 
